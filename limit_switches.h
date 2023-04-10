@@ -25,7 +25,7 @@ void check_release_ball(){
 }
 
 bool hit_wall(){
-	if(SensorValue(release_switch_left)==0 || SensorValue(release_switch_right)==0)return true;
+	if(SensorValue(release_switch_left)==0 && SensorValue(release_switch_right)==0)return true;
 	else return false;
 
 }

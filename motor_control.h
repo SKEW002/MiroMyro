@@ -19,7 +19,6 @@ bool check_collected_ball(){
 void go(char* direction, int speed, int time){
 	int start_time = nSysTime;
 	while(nSysTime - start_time <= time && main_switch.run_motor){
-
 		if(avoiding_state)return;
 		if (direction == "forward"){
 			motor[left_motor] = speed;
@@ -44,7 +43,7 @@ void go(char* direction, int speed, int time){
 }
 
 void turn_to_angle(char* direction, int target_orientation){
-	int speed = 40;
+	int speed = 60;
 	while(current_orientation!=target_orientation){
 		if(!main_switch.run_motor)return;
 		if(direction == "left"){
@@ -74,47 +73,62 @@ void drift(char *direction, int speed){
 
 
 void avoid_line(char* direction){
-	avoiding_state = true;
-	int speed;
-	int delay_period = 800;
-	if(previous_state == RETURNHOME){
-		delay_period = 500;
-	}
-	speed = 100;
 	if(!main_switch.run_motor)return;
+	avoiding_state = true;
+	avoid_line_count++;
+	int speed = 100;
+	int delay_period = 800;
 
-	if(direction == "front_left"){
-		motor[left_motor] = -speed;
-		motor[right_motor] = -speed;
+	///////////////////added
+	if(previous_state == RETURNHOME){
+		if(direction == "front_left" || direction == "rear_left"){
+			motor[left_motor] = speed;
+			motor[right_motor] = -speed;
+		}
+		else{
+			motor[left_motor] = -speed;
+			motor[right_motor] = speed;
+		}
+		delay(300);
+		motor[left_motor] = speed;
+		motor[right_motor] = speed;
 		delay(delay_period);
-		motor[left_motor] = speed;
-		motor[right_motor] = -speed;
 	}
+	else{
+		if(direction == "front_left"){
+			motor[left_motor] = -speed;
+			motor[right_motor] = -speed;
+			delay(delay_period);
+			motor[left_motor] = speed;
+			motor[right_motor] = -speed;
+		}
 
-	else if(direction == "front_right"){
-		motor[left_motor] = -speed;
-		motor[right_motor] = -speed;
-		delay(delay_period);
-		motor[left_motor] = -speed;
-		motor[right_motor] = speed;
-	}
+		else if(direction == "front_right"){
+			motor[left_motor] = -speed;
+			motor[right_motor] = -speed;
+			delay(delay_period);
+			motor[left_motor] = -speed;
+			motor[right_motor] = speed;
+		}
 
-	else if(direction == "rear_right"){
-		motor[left_motor] = speed;
-		motor[right_motor] = speed;
-		delay(800);
-		motor[left_motor] = speed;
-		motor[right_motor] = 0;
-	}
+		else if(direction == "rear_right"){
+			motor[left_motor] = speed;
+			motor[right_motor] = speed;
+			delay(800);
+			motor[left_motor] = speed;
+			motor[right_motor] = 0;
+		}
 
-	else if(direction == "rear_left"){
-		motor[left_motor] = speed;
-		motor[right_motor] = speed;
-		delay(800);
-		motor[left_motor] = 0;
-		motor[right_motor] = speed;
+		else if(direction == "rear_left"){
+			motor[left_motor] = speed;
+			motor[right_motor] = speed;
+			delay(800);
+			motor[left_motor] = 0;
+			motor[right_motor] = speed;
+		}
+		if(increase_avoid_line_delay)delay(delay_period+200);
+		else delay(delay_period-300);//+100*random(3));
 	}
-	delay(delay_period+100*random(3));
 	robot_state = previous_state;
 	avoiding_state = false;
 }
@@ -130,9 +144,6 @@ void collector_control(char* action){
 	int error;
 	int prev_error;
 	int integral_error = 0;
-
-
-	//if (!main_switch.run_motor)return;
 	while(1){
 		if(action == "release"){
 			target_angle = -280;
@@ -142,6 +153,7 @@ void collector_control(char* action){
 				break;
 			}
 		}
+
 		else if (action == "catch"){
 			kp = 0.2;
 			kd = 0.01;
@@ -150,14 +162,14 @@ void collector_control(char* action){
 			error = target_angle - SensorValue[shaft_encoder];
 			if(prev_error==NULL)prev_error = error;
 			integral_error += error;
-			int error_speed = kp*error + ki*integral_error;// + kd*(error - prev_error);
+			int error_speed = kp*error + ki*integral_error + kd*(error - prev_error);
 			prev_error = error;
 			if (error_speed >= 35)error_speed = 35;
 			else if(error_speed <= -35)error_speed = -35;
 			if(check_collected_ball())ball_collected = true;
 			if(avoiding_state)stop_motor();
 			motor[collector_motor] = error_speed;
-			if (nSysTime - start_time >= 2000){
+			if (nSysTime - start_time >= 1700){
 				motor[collector_motor] = 0;
 				break;
 			}
@@ -176,6 +188,7 @@ void collector_control(char* action){
 				break;
 			}
 		}
+
 		else if(action == "fail"){
 			target_angle = 0;
 			kp = 0.8;
@@ -190,7 +203,6 @@ void collector_control(char* action){
 			}
 		}
 	}
-
 }
 
 

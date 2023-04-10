@@ -32,7 +32,7 @@ task main(){
 	startTask(check_current_orientation);
 	startTask(ball_detection);
 	startTask(opponent_detection);
-
+	startTask(avoid_line_counter);
 
 	while(1){
 		if(!main_switch.run_motor){

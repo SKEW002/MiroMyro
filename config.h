@@ -8,12 +8,13 @@
 #define AVOIDREARRIGHTLINE 4
 #define AVOIDREARLEFTLINE 5
 #define GOTOBALL 6
-#define SEARCHING 8
-#define COLLECTINGBALL 9
-#define RETURNHOME 10
-#define CHECKBALL 11
-#define AVOIDOPPONENT 12
-#define RELEASEDBALL 13
+#define SEARCHING 7
+#define COLLECTINGBALL 8
+#define RETURNHOME 9
+#define CHECKBALL 10
+#define AVOIDOPPONENT 11
+#define RELEASEDBALL 12
+#define HANDLEOPPONENT 13
 
 #define MAX_VALUE_CHANGE 20
 
@@ -22,6 +23,11 @@
 //state machine
 int robot_state;
 int previous_state;
+int search_time;
+bool left_first;
+int avoid_line_count;
+bool increase_avoid_line_delay;
+int handle_opponent;
 
 //limit switches
 typedef struct{
@@ -46,6 +52,7 @@ bool opponent_infront;
 
 //line sensors
 #define IR_THRESHOLD_VALUE 900
+
 int ir1;
 int ir2;
 int ir3;
@@ -55,12 +62,13 @@ bool avoiding_state;
 //digital compass
 int current_orientation;
 
+/*
 //debugging variable
 int debug_int1;
 int debug_int2;
 float debug_float1;
 float debug_float2;
-
+*/
 
 //include functions
 #include "motor_control.h"
@@ -72,6 +80,10 @@ float debug_float2;
 
 //Function to initialize value
 void init(){
+	handle_opponent = 0;
+	increase_avoid_line_delay = false;
+	avoid_line_count = 0;
+	left_first = true;
 	avoiding_state = false;
 	opponent_infront = false;
 	sharp.sensor_1 = 100;

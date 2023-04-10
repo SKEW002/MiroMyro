@@ -20,13 +20,13 @@ bool line_sensor_front_left_triggered(){
 
 bool line_sensor_rear_left_triggered(){
 	ir3 = SensorValue(IR_3);
-	if(SensorValue(IR_3)<= IR_THRESHOLD_VALUE)return true;
+	if(SensorValue(IR_3)<= 0)return true;
 	else return false;
 }
 
 bool line_sensor_rear_right_triggered(){
 	ir4 = SensorValue(IR_4);
-	if(SensorValue(IR_4)<= IR_THRESHOLD_VALUE)return true;
+	if(SensorValue(IR_4)<= 0)return true;
 	else return false;
 }
 

@@ -6,7 +6,7 @@
 #define SHARP_SENSORS_H
 
 
-task set_distance(){
+task set_distance(){//credits to chandrasekaran && alberito
 	while(1){
 		int NUM_READINGS = 5;
 
@@ -44,50 +44,75 @@ task set_distance(){
 
 task ball_detection(){
 	while(1){
-		if(sharp.sensor_4 <= 10)continue;
+		if(sharp.sensor_4 <= 15)continue;
 		if(sharp.sensor_2 >= 14 || sharp.sensor_2 <= 12){
 			robot_state = COLLECTINGBALL;
 		}
-		if ((sharp.sensor_3 <= 30 ||sharp.sensor_1 <= 30) && (robot_state == FORWARDSEARCH||robot_state == SEARCHING)&&current_orientation!=270 && current_orientation!=315){
+		if ((sharp.sensor_3 <= 30 ||sharp.sensor_1 <= 30) && (robot_state == FORWARDSEARCH || robot_state == SEARCHING)&&current_orientation!=270 && current_orientation!=315){
+			if((robot_state == FORWARDSEARCH || robot_state == SEARCHING) && previous_state != GOTOBALL)previous_state = robot_state;
 			robot_state = GOTOBALL;
 		}
 	}
 }
 
 task opponent_detection(){
+	int cool_down = 4000;
+	bool start_check_opponent = true;
+	int start_time = 0;
+	int detect_count = 0;
 	while(1){
-		if (sharp.sensor_4 <= 10){
-			opponent_infront = true;
+		if(start_check_opponent){
+			if (sharp.sensor_4 <= 15){
+				if(detect_count <= 30)detect_count++;
+				else{
+					start_time = nSysTime;
+					opponent_infront = true;
+					start_check_opponent = false;
+					detect_count = 0;
+				}
+			}
+			else{
+				detect_count = 0;
+				opponent_infront = false;
+			}
 		}
 
-		else opponent_infront = false;
+		if(start_time!=0){
+			delay(1000);
+			opponent_infront = false;
+			if(nSysTime - start_time >= cool_down){
+				start_check_opponent = true;
+				start_time = 0;
+			}
+		}
+
 	}
 }
 
-/*
-int sensor_dist(int sensor_no){
-int dist;
-int value = SensorValue(sharp_front_bottom);
+	/*
+	int sensor_dist(int sensor_no){
+	int dist;
+	int value = SensorValue(sharp_front_bottom);
 
-if (sensor_no == 1){
-dist = 160339 * (float) pow(value, -1.285);
+	if (sensor_no == 1){
+	dist = 160339 * (float) pow(value, -1.285);
 
-}
-else if (sensor_no == 2){
-dist = 180581 * (float) pow(value,-1.299);
+	}
+	else if (sensor_no == 2){
+	dist = 180581 * (float) pow(value,-1.299);
 
-}
-else if (sensor_no == 3){
-dist = 101263 * (float) pow(value,-1.226);
+	}
+	else if (sensor_no == 3){
+	dist = 101263 * (float) pow(value,-1.226);
 
-}
-else if (sensor_no == 4){
-dist = 27724 * (float) pow(value,-1.153);
+	}
+	else if (sensor_no == 4){
+	dist = 27724 * (float) pow(value,-1.153);
 
-}
+	}
 
-return dist;
-}
-*/
+	return dist;
+	}
+	*/
 
 #endif
