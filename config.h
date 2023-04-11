@@ -83,7 +83,7 @@ void init(){
 	handle_opponent = 0;
 	increase_avoid_line_delay = false;
 	avoid_line_count = 0;
-	left_first = true;
+	left_first = false;
 	avoiding_state = false;
 	opponent_infront = false;
 	sharp.sensor_1 = 100;
@@ -101,57 +101,3 @@ void init(){
 
 
 #endif
-
-
-/*
-#include "motor_control.h"
-#include "sharp_sensors.h"
-#include "line_sensors.h"
-#include "compass.h"
-#include "state_machine.h"
-#include "limit_switches.h"
-
-#define HOMESTATE 0
-#define GOFORWARD 1
-#define AVOIDFRONTLEFTLINE 2
-#define AVOIDFRONTRIGHTLINE 3
-#define AVOIDREARRIGHTLINE 4
-#define AVOIDREARLEFTLINE 5
-#define BALLCOLLECTED 6
-unsigned short int robot_state = HOMESTATE;
-
-typedef struct _sharp_sensor{
-	float sensor_1;
-	float sensor_2;
-	float sensor_3;
-	float sensor_4;
-}Sharp;
-
-Sharp sharp;
-
-task start_mission();
-task set_distance();
-void return_home();
-task check_line();
-void init();
-task on_off_motor();
-
-void go(char* direction, int speed, int time);
-void stop_motor();
-
-bool main_switch_pressed();
-bool ball_collected();
-
-bool line_sensor_front_left_triggered();
-bool line_sensor_front_right_triggered();
-
-typedef struct{
-	bool run_motor;
-	unsigned int buffer_count;
-} MainSwitch;
-
-MainSwitch main_switch;
-
-float initial_orientation;
-float compass(void);
-*/

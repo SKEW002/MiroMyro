@@ -30,30 +30,5 @@ bool hit_wall(){
 
 }
 
-/*
-bool ball_collected(){
-	if(SensorValue(collector_switch)==0)return true;
-	else return false;
-}
-
-bool ready_release_ball(){
-	if(SensorValue(release_switch_left)==0 && SensorValue(release_switch_right)==0)return true;
-	else return false;
-}
-
-bool rear_right_switch_pressed(){
-	if(SensorValue(rear_right_switch)==0)return true;
-	else return false;
-}
-
-bool rear_left_switch_pressed(){
-	if(SensorValue(rear_right_switch)==0)return true;
-	else return false;
-}
-
-*/
-
-
-
 
 #endif

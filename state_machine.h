@@ -60,7 +60,7 @@ task check_line(){
 }
 
 void return_home(){
-	suspendTask(check_line);/////////////////////////added
+	suspendTask(check_line);
 	avoiding_state = false;
 	if(current_orientation == 315 || current_orientation == 0 || current_orientation == 45){
 		turn_to_angle("right", 270);
@@ -72,8 +72,8 @@ void return_home(){
 	int value_change = 0;
 
 	while(1){
-		resumeTask(check_line);////////////////////////added
-		if(avoiding_state)return;/////////////////////added
+		resumeTask(check_line);
+		if(avoiding_state)return;
 		if(opponent_infront){
 			handle_opponent = 2;
 			robot_state = HANDLEOPPONENT;
@@ -109,8 +109,6 @@ void return_home(){
 }
 void search(){
 	int start_time = nSysTime;
-	//int period = 0;
-	//debug_int1 = 0;
 	int random_period_1 = random(3);
 	int random_period_2 = random(3);
 	if(robot_state != SEARCHING)return;
@@ -147,12 +145,6 @@ void reset_position(){
 task start_mission(){
 	int start_time = 0;
 	while(1){
-		/*
-		if (opponent_infront){
-		stop_motor();
-		delay(2000);
-		}
-		*/
 		if (robot_state == FORWARDSEARCH){
 			go("forward", 127, 10);
 		}
@@ -216,8 +208,6 @@ task start_mission(){
 			resumeTask(check_line);
 		}
 		else if(robot_state == GOTOBALL){
-			/////////////////////////////////////////////////////////
-			/*
 			if(start_time == 0)start_time = nSysTime;
 			if(start_time!=0){
 				if(nSysTime - start_time >= 4000){
@@ -226,21 +216,12 @@ task start_mission(){
 					continue;
 				}
 			}
-			*/
 			if(opponent_infront){
 				robot_state = HANDLEOPPONENT;
 				start_time = 0;
 				continue;
 			}
-			/*
-			if(opponent_infront){
-			if(nSysTime - start_time <= 4000){
-			stop_motor();
-			continue;
-			}
-			}
-			*/
-			////////////////////////////to be tested///////////////////
+
 			if(hit_wall()){
 				robot_state = RELEASEDBALL;
 				start_time = 0;
@@ -249,14 +230,13 @@ task start_mission(){
 			if(sharp.sensor_3 <= 30 && sharp.sensor_3 >= 15 && sharp.sensor_1 >= 40){ //right
 				drift("right", 80);
 			}
-			else if(sharp.sensor_3 >= 40 && sharp.sensor_1 <= 30 && sharp.sensor_1 >= 15){ //left
+			else if(sharp.sensor_3 >= 40 && sharp.sensor_1 <= 30 && sharp.sensor_1 >= 15){ //left //check arena
 				drift("left", 80);
 			}
 			else if((sharp.sensor_3 <= 30 && sharp.sensor_1 <= 30)&&!opponent_infront){
-				go("forward", 80,100);
+				go("forward", 70,100);
 			}
 			else if (sharp.sensor_3 > 30 && sharp.sensor_1 > 30){
-				//stop_motor();
 				go("forward", 80,100);
 				robot_state = previous_state;
 				start_time = 0;
@@ -264,20 +244,23 @@ task start_mission(){
 			}
 		}
 
-		else if (robot_state == HANDLEOPPONENT){ ///////////////////added/////////////////
+		else if (robot_state == HANDLEOPPONENT){
 			if (handle_opponent == 2){
-				go("reverse",80,400);
-				if(random(1) == 0){
-					go("left", 80,800);
-					go("forward", 80,1000);
-					go("right", 80,800);
+				go("reverse",80,800);
+				if(left_first){
+					go("left", 80,750);
+					go("forward", 80,1300);
+					go("right", 80,750);
 				}
 				else{
-					go("right", 80,800);
-					go("forward", 80,1000);
-					go("left", 80,800);
+					go("right", 80,750);
+					go("forward", 80,1300);
+					go("left", 80,750);
 				}
-
+				if(robot_state != HANDLEOPPONENT){
+					left_first = !left_first;
+					continue;
+				}
 				opponent_infront = false;
 				robot_state = RETURNHOME;
 				handle_opponent = 0;
@@ -290,8 +273,6 @@ task start_mission(){
 				continue;
 			}
 			else if (handle_opponent == 0){
-				stop_motor();
-				delay(2000);
 				opponent_infront = false;
 				robot_state = SEARCHING;
 				continue;

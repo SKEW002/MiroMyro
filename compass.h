@@ -28,7 +28,6 @@ int compass(){
 	case 6: return 315; 	//NW
 		break;
 	}
-
 	return -1;
 }
 

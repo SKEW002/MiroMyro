@@ -79,7 +79,6 @@ void avoid_line(char* direction){
 	int speed = 100;
 	int delay_period = 800;
 
-	///////////////////added
 	if(previous_state == RETURNHOME){
 		if(direction == "front_left" || direction == "rear_left"){
 			motor[left_motor] = speed;
@@ -98,7 +97,7 @@ void avoid_line(char* direction){
 		if(direction == "front_left"){
 			motor[left_motor] = -speed;
 			motor[right_motor] = -speed;
-			delay(delay_period);
+			delay(delay_period-200);
 			motor[left_motor] = speed;
 			motor[right_motor] = -speed;
 		}
@@ -106,7 +105,7 @@ void avoid_line(char* direction){
 		else if(direction == "front_right"){
 			motor[left_motor] = -speed;
 			motor[right_motor] = -speed;
-			delay(delay_period);
+			delay(delay_period-200);
 			motor[left_motor] = -speed;
 			motor[right_motor] = speed;
 		}
@@ -114,7 +113,7 @@ void avoid_line(char* direction){
 		else if(direction == "rear_right"){
 			motor[left_motor] = speed;
 			motor[right_motor] = speed;
-			delay(800);
+			delay(600);
 			motor[left_motor] = speed;
 			motor[right_motor] = 0;
 		}
@@ -122,12 +121,12 @@ void avoid_line(char* direction){
 		else if(direction == "rear_left"){
 			motor[left_motor] = speed;
 			motor[right_motor] = speed;
-			delay(800);
+			delay(600);
 			motor[left_motor] = 0;
 			motor[right_motor] = speed;
 		}
 		if(increase_avoid_line_delay)delay(delay_period+200);
-		else delay(delay_period-300);//+100*random(3));
+		else delay(delay_period-300);
 	}
 	robot_state = previous_state;
 	avoiding_state = false;
@@ -204,18 +203,6 @@ void collector_control(char* action){
 		}
 	}
 }
-
-
-/*
-void test_collect_ball(){
-	collector_control("catch");
-	delay(1000);
-	collector_control("release");
-	delay(1000);
-	collector_control("home");
-	delay(1000);
-}
-*/
 
 
 #endif

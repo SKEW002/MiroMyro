@@ -30,17 +30,4 @@ bool line_sensor_rear_right_triggered(){
 	else return false;
 }
 
-
-/*
-bool line_sensor_rear_left_triggered(){
-	if(SensorValue(line_sensor_rear_left)==0)return true;
-	else return false;
-}
-
-bool line_sensor_rear_right_triggered(){
-	if(SensorValue(line_sensor_rear_right)==0)return true;
-	else return false;
-}
-*/
-
 #endif
