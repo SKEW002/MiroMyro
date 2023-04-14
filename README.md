@@ -11,3 +11,19 @@ Image of the actual robot and the CAD model (credits to Koo Bing Han who created
 
 ## Detailed Flowchart
 <img src="https://user-images.githubusercontent.com/57441569/231929405-7a96ccea-9b8e-4f33-ab72-93751bdb45c5.png" width="487" height="651">
+
+## Contributors
+9 members were contributed to this project
+
+### Hardware
+Josh Goh Jian Feng \
+Koo Bing Han \
+Hoe Chang Shen \
+Timothy Lim Jin Hng \
+Chee Zhong Sheng
+
+### Software
+Kew Shen Yu \
+Albert Ong Jia De \
+Chandrasekaran Vignesh Subramaniam \
+Mohammad Uzair Bin Rosman’id
